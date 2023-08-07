@@ -27,7 +27,7 @@ int DelegateClient(ycsbc::DB *db, ycsbc::CoreWorkload *wl, const int num_ops,
     bool is_loading) {
   db->Init();
   ycsbc::Client client(*db, *wl);
-  int oks = 0;
+  uint32_t oks = 0;
   for (int i = 0; i < num_ops; ++i) {
     if (is_loading) {
       oks += client.DoInsert();
@@ -48,22 +48,22 @@ int main(const int argc, const char *argv[]) {
     cout << "Unknown database name " << props["dbname"] << endl;
     exit(0);
   }
-
+  
   ycsbc::CoreWorkload wl;
   wl.Init(props);
 
   const int num_threads = stoi(props.GetProperty("threadcount", "1"));
 
   // Loads data
-  vector<future<int>> actual_ops;
-  int total_ops = stoi(props[ycsbc::CoreWorkload::RECORD_COUNT_PROPERTY]);
+  vector<future<int32_t>> actual_ops;
+  int32_t total_ops = stoi(props[ycsbc::CoreWorkload::RECORD_COUNT_PROPERTY]);
   for (int i = 0; i < num_threads; ++i) {
     actual_ops.emplace_back(async(launch::async,
         DelegateClient, db, &wl, total_ops / num_threads, true));
   }
   assert((int)actual_ops.size() == num_threads);
 
-  int sum = 0;
+  uint32_t sum = 0;
   for (auto &n : actual_ops) {
     assert(n.valid());
     sum += n.get();
@@ -111,6 +111,14 @@ string ParseCommandLine(int argc, const char *argv[], utils::Properties &props) 
         exit(0);
       }
       props.SetProperty("dbname", argv[argindex]);
+      argindex++;
+    } else if (strcmp(argv[argindex], "-path") == 0) {
+      argindex++;
+      if (argindex >= argc) {
+        UsageMessage(argv[0]);
+        exit(0);
+      }
+      props.SetProperty("path", argv[argindex]);
       argindex++;
     } else if (strcmp(argv[argindex], "-host") == 0) {
       argindex++;
@@ -171,7 +179,8 @@ void UsageMessage(const char *command) {
   cout << "Options:" << endl;
   cout << "  -threads n: execute using n threads (default: 1)" << endl;
   cout << "  -db dbname: specify the name of the DB to use (default: basic)" << endl;
-  cout << "  -P propertyfile: load properties from the given file. Multiple files can" << endl;
+  cout << "  -path datapath: specify the path to store data persistently" << endl;
+  cout << "  -P propertyfile: load properties from the given file (workspecs). Multiple files can" << endl;
   cout << "                   be specified, and will be processed in the order specified" << endl;
 }
 
