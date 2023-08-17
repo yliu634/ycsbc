@@ -1,5 +1,5 @@
-#ifndef YCSB_C_LEVELDB_H
-#define YCSB_C_LEVELDB_H
+#ifndef YCSB_C_SPOTKV_H
+#define YCSB_C_SPOTKV_H
 
 #include "core/db.h"
 #include "core/properties.h"
@@ -8,19 +8,19 @@
 #include <string>
 #include <fstream>
 
-#include <leveldb/db.h>
-#include <leveldb/env.h>
-#include <leveldb/cache.h>
-#include <leveldb/slice.h>
-#include <leveldb/filter_policy.h>
+#include <spotkv/db.h>
+#include <spotkv/env.h>
+#include <spotkv/cache.h>
+#include <spotkv/slice.h>
+#include <spotkv/filter_policy.h>
 
 using std::cout;
 using std::endl;
 
 namespace ycsbc {
-class LevelDB : public DB{
+class SpotKV : public DB{
   public :
-    LevelDB(const std::string filename);
+    SpotKV(const std::string filename);
     int Read(const std::string &table, const std::string &key,
             std::string &result);
     int Insert(const std::string &table, const std::string &key,
@@ -31,13 +31,13 @@ class LevelDB : public DB{
             const std::string &value);
     int Delete(const std::string &table, const std::string &key);
     void GetProperty(const std::string &property);
-    virtual ~LevelDB();
+    virtual ~SpotKV();
     void Close();
 
   private:
-    leveldb::DB *db_;
-    leveldb::ReadOptions *readop_;
-    leveldb::WriteOptions *writeop_;
+    spotkv::DB *db_;
+    spotkv::ReadOptions *readop_;
+    spotkv::WriteOptions *writeop_;
 
 };
 

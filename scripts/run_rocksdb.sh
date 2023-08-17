@@ -3,7 +3,7 @@
 trap 'kill $(jobs -p)' SIGINT
 
 # workloads="./workloads/workloada.spec ../workloads/workloadb.spec ../workloads/workloadd.spec ../workloads/workloadf.spec"
-workloads="./workloads/workloadc.spec"
+workloads="./workloads/workloadt.spec"
 datapath="/mnt/nvmedisk/yiliu/rocksdb/"
 
 for workload in $workloads; do

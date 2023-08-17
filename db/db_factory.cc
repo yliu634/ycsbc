@@ -12,6 +12,7 @@
 #include "db/basic_db.h"
 #include "db/leveldb_db.h"
 #include "db/rocksdb_db.h"
+#include "db/spotkv_db.h"
 
 using namespace std;
 
@@ -25,6 +26,8 @@ DB* DBFactory::CreateDB(utils::Properties &props) {
     return new LevelDB(props["path"]);
   } else if (props["dbname"] == "rocksdb") {
     return new RocksDB(props["path"]);
+  } else if (props["dbname"] == "spotkv") {
+    return new SpotKV(props["path"]);
   } else return NULL;
 }
 

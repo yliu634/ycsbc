@@ -28,6 +28,7 @@ class RocksDB : public DB{
     int Update(const std::string &table, const std::string &key,
             const std::string &value);
     int Delete(const std::string &table, const std::string &key);
+    void GetProperty(const std::string &property) { return;}
     virtual ~RocksDB();
     void Close();
 

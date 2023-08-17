@@ -63,6 +63,10 @@ class BasicDB : public DB {
     return 0; 
   }
 
+  void GetProperty(const std::string &property) {
+    return;
+  }
+
  private:
   std::mutex mutex_;
 };

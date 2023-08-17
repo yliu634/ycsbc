@@ -88,6 +88,8 @@ class DB {
   ///
   virtual int Delete(const std::string &table, const std::string &key) = 0;
   
+  virtual void GetProperty(const std::string &property) = 0;
+
   virtual ~DB() { }
 };
 
